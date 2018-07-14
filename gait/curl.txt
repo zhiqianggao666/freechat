@@ -1,0 +1,5 @@
+curl -H "Content-type: application/octet-stream" -X POST http://109.123.123.140/gait/predict --data-binary @/home/tizen/share/rest/dataset1/in_zxf2.csv
+
+
+	for i, fileName in enumerate( 'test.csv' ):
+		print '111111111111',fileName
