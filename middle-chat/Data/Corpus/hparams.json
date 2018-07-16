@@ -15,8 +15,8 @@
   "log_device_placement": true,
   "max_gradient_norm": 5.0,
   "num_buckets": 5,
-  "num_epochs": 60,
-  "num_layers": 2,
+  "num_epochs": 1,
+  "num_layers": 1,
   "num_units": 1024,
   "pass_hidden_state": true,
   "random_seed": 0.1,
@@ -27,5 +27,6 @@
   "tgt_max_len_infer": 50,
   "time_major": true,
   "unk_token": "_unk_",
-  "unk_id": 0
+  "unk_id": 0,
+  "example_num":10000
 }

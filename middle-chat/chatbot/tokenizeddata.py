@@ -20,6 +20,9 @@ from collections import namedtuple
 from tensorflow.python.ops import lookup_ops
 
 from chatbot.hparams import HParams
+import unicodedata
+import re
+import jieba
 
 COMMENT_LINE_STT = "#=="
 CONVERSATION_SEP = "==="
@@ -70,6 +73,27 @@ class TokenizedData:
             self.reverse_vocab_table = \
                 lookup_ops.index_to_string_table_from_file(vocab_file,
                                                            default_value=self.hparams.unk_token)
+
+
+    def preprocess_sentence_for_chi(w):
+        # creating a space between a word and the punctuation following it
+        # eg: "he is a boy." => "he is a boy ."
+        # Reference:- https://stackoverflow.com/questions/3645931/python-padding-punctuation-with-white-spaces-keeping-punctuation
+        w = re.sub(r"[(.,!?\"':;)]【（。，！？、“：；）】", r" \1 ", w)
+    
+        w = ' '.join(jieba.cut(w, cut_all=False))
+        w = re.sub(r'[" "]+', " ", w)
+    
+        w = w.rstrip().strip()
+    
+        # adding a start and an end token to the sentence
+        # so that the model know when to start and stop predicting.
+        w = '<start> ' + w + ' <end>'
+        return w
+
+
+
+
 
     def get_training_batch(self, num_threads=4):
         assert self.training
@@ -180,44 +204,38 @@ class TokenizedData:
                             target_sequence_length=None)
 
     def _load_corpus(self, corpus_dir):
-        for fd in range(2, -1, -1):
-            file_list = []
-            if fd == 0:
-                file_dir = os.path.join(corpus_dir, AUG0_FOLDER)
-            elif fd == 1:
-                file_dir = os.path.join(corpus_dir, AUG1_FOLDER)
-            else:
-                file_dir = os.path.join(corpus_dir, AUG2_FOLDER)
+        file_list = []
+        file_dir = os.path.join(corpus_dir, AUG0_FOLDER)
 
-            for data_file in sorted(os.listdir(file_dir)):
-                full_path_name = os.path.join(file_dir, data_file)
-                if os.path.isfile(full_path_name) and data_file.lower().endswith('.txt'):
-                    file_list.append(full_path_name)
+        for data_file in sorted(os.listdir(file_dir)):
+            full_path_name = os.path.join(file_dir, data_file)
+            if os.path.isfile(full_path_name) and data_file.lower().endswith('.conv'):
+                file_list.append(full_path_name)
 
-            assert len(file_list) > 0
-            dataset = tf.data.TextLineDataset(file_list)
+        assert len(file_list) > 0
+        dataset = tf.data.TextLineDataset(file_list)
 
-            src_dataset = dataset.filter(lambda line:
-                                         tf.logical_and(tf.size(line) > 0,
-                                                        tf.equal(tf.substr(line, 0, 2), tf.constant('Q:'))))
-            src_dataset = src_dataset.map(lambda line:
-                                          tf.substr(line, 2, MAX_LEN)).prefetch(4096)
-            tgt_dataset = dataset.filter(lambda line:
-                                         tf.logical_and(tf.size(line) > 0,
-                                                        tf.equal(tf.substr(line, 0, 2), tf.constant('A:'))))
-            tgt_dataset = tgt_dataset.map(lambda line:
-                                          tf.substr(line, 2, MAX_LEN)).prefetch(4096)
+        src_dataset = dataset.filter(lambda line:
+                                     tf.logical_and(tf.size(line) > 0,
+                                                    tf.equal(tf.substr(line, 0, 2), tf.constant('Q:'))))
+        src_dataset = src_dataset.map(lambda line:
+                                      tf.substr(line, 2, MAX_LEN)).prefetch(4096)
+        tgt_dataset = dataset.filter(lambda line:
+                                     tf.logical_and(tf.size(line) > 0,
+                                                    tf.equal(tf.substr(line, 0, 2), tf.constant('A:'))))
+        tgt_dataset = tgt_dataset.map(lambda line:
+                                      tf.substr(line, 2, MAX_LEN)).prefetch(4096)
 
-            src_tgt_dataset = tf.data.Dataset.zip((src_dataset, tgt_dataset))
-            if fd == 1:
-                src_tgt_dataset = src_tgt_dataset.repeat(self.hparams.aug1_repeat_times)
-            elif fd == 2:
-                src_tgt_dataset = src_tgt_dataset.repeat(self.hparams.aug2_repeat_times)
+        src_tgt_dataset = tf.data.Dataset.zip((src_dataset, tgt_dataset))
+        if fd == 1:
+            src_tgt_dataset = src_tgt_dataset.repeat(self.hparams.aug1_repeat_times)
+        elif fd == 2:
+            src_tgt_dataset = src_tgt_dataset.repeat(self.hparams.aug2_repeat_times)
 
-            if self.text_set is None:
-                self.text_set = src_tgt_dataset
-            else:
-                self.text_set = self.text_set.concatenate(src_tgt_dataset)
+        if self.text_set is None:
+            self.text_set = src_tgt_dataset
+        else:
+            self.text_set = self.text_set.concatenate(src_tgt_dataset)
 
     def _convert_to_tokens(self, buffer_size):
         # The following 3 steps act as a python String lower() function
