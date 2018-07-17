@@ -18,6 +18,7 @@ import tensorflow as tf
 
 from collections import namedtuple
 from tensorflow.python.ops import lookup_ops
+from tensorflow.python.platform import gfile
 
 from chatbot.hparams import HParams
 import unicodedata
@@ -28,13 +29,72 @@ COMMENT_LINE_STT = "#=="
 CONVERSATION_SEP = "==="
 
 AUG0_FOLDER = "Augment0"
-AUG1_FOLDER = "Augment1"
-AUG2_FOLDER = "Augment2"
 
 MAX_LEN = 1000  # Assume no line in the training data is having more than this number of characters
 VOCAB_FILE = "vocab.txt"
 
+_PAD = b"_PAD"
 
+PAD_ID = 0
+GO_ID = 1
+EOS_ID = 2
+UNK_ID = 3
+
+
+def split_chinese(sentence):
+    line = re.split(u'【（。，！？、“：；）】', sentence.strip())
+    ws = []
+    for words in line:
+        for w in words:
+            ws.append(w)
+    return ws
+
+def create_vocab(file_dir, vocab_file,hparams):
+    file_list = []
+    for data_file in sorted(os.listdir(file_dir)):
+        full_path_name = os.path.join(file_dir, data_file)
+        if os.path.isfile(full_path_name) and data_file.lower().endswith('.conv'):
+            file_list.append(full_path_name)
+    
+    assert len(file_list) > 0
+    if not gfile.Exists(vocab_file):
+        print("Creating vocabulary-------:%s", vocab_file)
+        vocab = {}
+        for fp in file_list:
+            print('fp-------%s', fp)
+            with gfile.GFile(fp, mode="rb") as f:
+                counter = 0
+                for line in f:
+                    counter += 1
+                    #if counter>1 and counter <100000:
+                    line = tf.compat.as_bytes(line)
+                    decoded_str = line.decode('utf-8')
+                    if decoded_str.startswith('M') and len(decoded_str) > 1:
+                        
+                        if counter % 100000 == 0:
+                            print("  processing line %d" % counter)
+                        tokens = split_chinese(decoded_str[2:-1])
+                        for w in tokens:
+                            word = w
+                            if word in vocab:
+                                vocab[word] += 1
+                            else:
+                                vocab[word] = 1
+        vocab_list = [hparams.bos_token,hparams.eos_token,hparams.unk_token] + sorted(vocab, key=vocab.get, reverse=True)
+        
+        print('>> Full Vocabulary Size :', len(vocab_list))
+        if len(vocab_list) > 10000:
+            vocab_list = vocab_list[:10000]
+        with gfile.GFile(vocab_file, mode="wb") as vf:
+            for w in vocab_list:
+                if type(w) is str:
+                    words = bytes(w.encode('utf-8')) + b"\n"
+                    vf.write(words)
+                else:
+                    words = w + b"\n"
+                    vf.write(words)
+
+    
 class TokenizedData:
     def __init__(self, corpus_dir, hparams=None, training=True, buffer_size=8192):
         """
@@ -56,43 +116,21 @@ class TokenizedData:
         self.training = training
         self.text_set = None
         self.id_set = None
-
         vocab_file = os.path.join(corpus_dir, VOCAB_FILE)
+        file_dir = os.path.join(corpus_dir, AUG0_FOLDER)
+        create_vocab(file_dir, vocab_file, self.hparams)
         self.vocab_size, _ = check_vocab(vocab_file)
         self.vocab_table = lookup_ops.index_table_from_file(vocab_file,
                                                             default_value=self.hparams.unk_id)
-        # print("vocab_size = {}".format(self.vocab_size))
 
         if training:
-            self.case_table = prepare_case_table()
             self.reverse_vocab_table = None
             self._load_corpus(corpus_dir)
             self._convert_to_tokens(buffer_size)
         else:
-            self.case_table = None
             self.reverse_vocab_table = \
                 lookup_ops.index_to_string_table_from_file(vocab_file,
                                                            default_value=self.hparams.unk_token)
-
-
-    def preprocess_sentence_for_chi(w):
-        # creating a space between a word and the punctuation following it
-        # eg: "he is a boy." => "he is a boy ."
-        # Reference:- https://stackoverflow.com/questions/3645931/python-padding-punctuation-with-white-spaces-keeping-punctuation
-        w = re.sub(r"[(.,!?\"':;)]【（。，！？、“：；）】", r" \1 ", w)
-    
-        w = ' '.join(jieba.cut(w, cut_all=False))
-        w = re.sub(r'[" "]+', " ", w)
-    
-        w = w.rstrip().strip()
-    
-        # adding a start and an end token to the sentence
-        # so that the model know when to start and stop predicting.
-        w = '<start> ' + w + ' <end>'
-        return w
-
-
-
 
 
     def get_training_batch(self, num_threads=4):
@@ -213,29 +251,36 @@ class TokenizedData:
                 file_list.append(full_path_name)
 
         assert len(file_list) > 0
-        dataset = tf.data.TextLineDataset(file_list)
+        src_data=[]
+        tgt_data=[]
+        for fp in file_list:
+            with gfile.GFile(fp, mode="rb") as f:
+                counter = 0
+                conversation = []
+                for line in f:
+                    line = tf.compat.as_bytes(line)
+                    counter += 1
+                    if counter % 100000 == 0:
+                        print("  processing line %d" % counter)
+                    decoded_str=line.decode('utf-8')
+                    
+                    if decoded_str.startswith('M')  and len(decoded_str) > 1:
+                        conversation.append(line)
+                    else:
+                        if decoded_str.startswith('E')  and len(decoded_str) <= 1:
+                            print('segment line is detected')
+                            for i,each_chat in enumerate(conversation):
+                                if i % 2 == 0:
+                                    src_data.append(each_chat)
+                                else:
+                                    tgt_data.append(each_chat)
+                            conversation = []
+                            
 
-        src_dataset = dataset.filter(lambda line:
-                                     tf.logical_and(tf.size(line) > 0,
-                                                    tf.equal(tf.substr(line, 0, 2), tf.constant('Q:'))))
-        src_dataset = src_dataset.map(lambda line:
-                                      tf.substr(line, 2, MAX_LEN)).prefetch(4096)
-        tgt_dataset = dataset.filter(lambda line:
-                                     tf.logical_and(tf.size(line) > 0,
-                                                    tf.equal(tf.substr(line, 0, 2), tf.constant('A:'))))
-        tgt_dataset = tgt_dataset.map(lambda line:
-                                      tf.substr(line, 2, MAX_LEN)).prefetch(4096)
 
-        src_tgt_dataset = tf.data.Dataset.zip((src_dataset, tgt_dataset))
-        if fd == 1:
-            src_tgt_dataset = src_tgt_dataset.repeat(self.hparams.aug1_repeat_times)
-        elif fd == 2:
-            src_tgt_dataset = src_tgt_dataset.repeat(self.hparams.aug2_repeat_times)
+        src_tgt_dataset = tf.data.Dataset.zip((tf.data.Dataset.from_tensor_slices(src_data), tf.data.Dataset.from_tensor_slices(tgt_data)))
+        self.text_set = src_tgt_dataset
 
-        if self.text_set is None:
-            self.text_set = src_tgt_dataset
-        else:
-            self.text_set = self.text_set.concatenate(src_tgt_dataset)
 
     def _convert_to_tokens(self, buffer_size):
         # The following 3 steps act as a python String lower() function
@@ -309,56 +354,3 @@ class BatchedInput(namedtuple("BatchedInput",
                                "source_sequence_length",
                                "target_sequence_length"])):
     pass
-
-# The code below is kept for debugging purpose only. Uncomment and run it to understand
-# the pipe line used in the new NMT model.
-# if __name__ == "__main__":
-#     import nltk
-#     from settings import PROJECT_ROOT
-#
-#     corp_dir = os.path.join(PROJECT_ROOT, 'Data', 'Corpus')
-#     training = True
-#     if training:
-#         td = TokenizedData(corp_dir)
-#         train_batch = td.get_training_batch()
-#
-#         with tf.Session() as sess:
-#             sess.run(tf.tables_initializer())
-#             sess.run(train_batch.initializer)
-#             print("Initialized ... ...")
-#
-#             for i in range(5):
-#                 try:
-#                     # Note that running training_batch directly won't trigger get_next() call.
-#                     # Run any of the 5 components will do the trick.
-#                     element = sess.run([train_batch.source, train_batch.target_input,
-#                                         train_batch.source_sequence_length, train_batch.target_sequence_length])
-#                     print(i, element)
-#                 except tf.errors.OutOfRangeError:
-#                     print("end of data @ {}".format(i))
-#                     break
-#     else:
-#         questions = ["How are you?", "What's your name?", "What time is it now?",
-#                      "When was the last time I met you? Do you remember?"]
-#         new_q_list = []
-#         for q in questions:
-#             tokens = nltk.word_tokenize(q.lower())
-#             new_q = ' '.join(tokens[:]).strip()
-#             new_q_list.append(new_q)
-#
-#         td = TokenizedData(corpus_dir=corp_dir, training=False)
-#         src_dataset = tf.data.Dataset.from_tensor_slices(tf.constant(new_q_list))
-#         infer_batch = td.get_inference_batch(src_dataset)
-#
-#         with tf.Session() as sess:
-#             sess.run(tf.tables_initializer())
-#             sess.run(infer_batch.initializer)
-#             print("Initialized ... ...")
-#
-#             for i in range(10):
-#                 try:
-#                     element = sess.run([infer_batch.source, infer_batch.source_sequence_length])
-#                     print(i, element)
-#                 except tf.errors.OutOfRangeError:
-#                     print("end of data @ {}".format(i))
-#                     break
