@@ -28,5 +28,6 @@
   "time_major": true,
   "unk_token": "_unk_",
   "unk_id": 0,
-  "example_num":10000
+  "example_num":100000,
+  "vocab_size":10000
 }

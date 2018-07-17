@@ -64,27 +64,28 @@ def create_vocab(file_dir, vocab_file,hparams):
             print('fp-------%s', fp)
             with gfile.GFile(fp, mode="rb") as f:
                 counter = 0
-                for line in f:
-                    counter += 1
-                    #if counter>1 and counter <100000:
-                    line = tf.compat.as_bytes(line)
-                    decoded_str = line.decode('utf-8')
-                    if decoded_str.startswith('M') and len(decoded_str) > 1:
-                        
-                        if counter % 100000 == 0:
-                            print("  processing line %d" % counter)
-                        tokens = split_chinese(decoded_str[2:-1])
-                        for w in tokens:
-                            word = w
-                            if word in vocab:
-                                vocab[word] += 1
-                            else:
-                                vocab[word] = 1
+                if counter < hparams.example_num:
+                    for line in f:
+                        counter += 1
+                        #if counter>1 and counter <100000:
+                        line = tf.compat.as_bytes(line)
+                        decoded_str = line.decode('utf-8')
+                        if decoded_str.startswith('M') and len(decoded_str) > 1:
+                            
+                            if counter % 100000 == 0:
+                                print("  processing line %d" % counter)
+                            tokens = split_chinese(decoded_str[2:-1])
+                            for w in tokens:
+                                word = w
+                                if word in vocab:
+                                    vocab[word] += 1
+                                else:
+                                    vocab[word] = 1
         vocab_list = [hparams.bos_token,hparams.eos_token,hparams.unk_token] + sorted(vocab, key=vocab.get, reverse=True)
         
         print('>> Full Vocabulary Size :', len(vocab_list))
-        if len(vocab_list) > 10000:
-            vocab_list = vocab_list[:10000]
+        if len(vocab_list) > hparams.vocab_size:
+            vocab_list = vocab_list[:hparams.vocab_size]
         with gfile.GFile(vocab_file, mode="wb") as vf:
             for w in vocab_list:
                 if type(w) is str:
@@ -257,24 +258,25 @@ class TokenizedData:
             with gfile.GFile(fp, mode="rb") as f:
                 counter = 0
                 conversation = []
-                for line in f:
-                    line = tf.compat.as_bytes(line)
-                    counter += 1
-                    if counter % 100000 == 0:
-                        print("  processing line %d" % counter)
-                    decoded_str=line.decode('utf-8')
-                    
-                    if decoded_str.startswith('M')  and len(decoded_str) > 1:
-                        conversation.append(line)
-                    else:
-                        if decoded_str.startswith('E')  and len(decoded_str) <= 1:
-                            print('segment line is detected')
-                            for i,each_chat in enumerate(conversation):
-                                if i % 2 == 0:
-                                    src_data.append(each_chat)
-                                else:
-                                    tgt_data.append(each_chat)
-                            conversation = []
+                if counter < self.hparams.example_num:
+                    for line in f:
+                        line = tf.compat.as_bytes(line)
+                        counter += 1
+                        if counter % 100000 == 0:
+                            print("  processing line %d" % counter)
+                        decoded_str=line.decode('utf-8')
+                        
+                        if decoded_str.startswith('M')  and len(decoded_str) > 1:
+                            conversation.append(line)
+                        else:
+                            if decoded_str.startswith('E')  and len(decoded_str) <= 1:
+                                print('segment line is detected')
+                                for i,each_chat in enumerate(conversation):
+                                    if i % 2 == 0:
+                                        src_data.append(each_chat)
+                                    else:
+                                        tgt_data.append(each_chat)
+                                conversation = []
                             
 
 
