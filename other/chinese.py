@@ -5,7 +5,7 @@ import tensorflow as tf
 
 def preprocess_func(x):
     ret= "*".join(x.decode('utf-8'))
-    print(ret)
+    #print(ret)
     return ret
 
 str = tf.py_func(
@@ -15,21 +15,31 @@ str = tf.py_func(
 
 
 
-def map_preprocess_func(x):
+def map_preprocess_func1(x):
     ret= "*".join(x.decode('utf-8'))
-    print(ret)
+    #print(ret)
     return ret
 
-def map_funct(line):
-    return tf.py_func(map_preprocess_func, [line], tf.string)
+def map_funct1(line):
+    return tf.py_func(map_preprocess_func1, [line], tf.string)
+
+
+
+def map_preprocess_func2(x):
+    c=[word for word in x.decode('utf-8')]
+    a=1
+    return c,a
+
+def map_funct2(line):
+    return tf.py_func(map_preprocess_func2, [line], [tf.string, tf.int64])
+
 
 dataset = tf.data.TextLineDataset('/home/tizen/share/charmpy/tf/cmn-eng/b.txt')
-dataset = dataset.map(map_funct)
+dataset = dataset.map(map_funct2)
 dataset = dataset.batch(1)
 inter = dataset.make_one_shot_iterator()
 
-
 with tf.Session() as sess:
-    sess.run(str)
-    sess.run(inter.get_next())
+    print(sess.run(str).decode())
+    print(sess.run(inter.get_next())[0][0][0].decode())
     

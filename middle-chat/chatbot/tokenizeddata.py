@@ -19,7 +19,7 @@ import tensorflow as tf
 from collections import namedtuple
 from tensorflow.python.ops import lookup_ops
 from tensorflow.python.platform import gfile
-
+import tensorflow.contrib.eager as tfe
 from chatbot.hparams import HParams
 import unicodedata
 import re
@@ -64,23 +64,22 @@ def create_vocab(file_dir, vocab_file,hparams):
             print('fp-------%s', fp)
             with gfile.GFile(fp, mode="rb") as f:
                 counter = 0
-                if counter < hparams.example_num:
-                    for line in f:
-                        counter += 1
-                        #if counter>1 and counter <100000:
-                        line = tf.compat.as_bytes(line)
-                        decoded_str = line.decode('utf-8')
-                        if decoded_str.startswith('M') and len(decoded_str) > 1:
-                            
-                            if counter % 100000 == 0:
-                                print("  processing line %d" % counter)
-                            tokens = split_chinese(decoded_str[2:-1])
-                            for w in tokens:
-                                word = w
-                                if word in vocab:
-                                    vocab[word] += 1
-                                else:
-                                    vocab[word] = 1
+                for line in f:
+                    if counter > hparams.example_num:
+                        break
+                    counter += 1
+                    line = tf.compat.as_bytes(line)
+                    decoded_str = line.decode('utf-8')
+                    if counter % 100000 == 0:
+                        print("  processing line %d" % counter)
+                    if decoded_str.startswith('M') and len(decoded_str) > 1:
+                        tokens = split_chinese(decoded_str[2:-1])
+                        for w in tokens:
+                            word = w
+                            if word in vocab:
+                                vocab[word] += 1
+                            else:
+                                vocab[word] = 1
         vocab_list = [hparams.bos_token,hparams.eos_token,hparams.unk_token] + sorted(vocab, key=vocab.get, reverse=True)
         
         print('>> Full Vocabulary Size :', len(vocab_list))
@@ -258,39 +257,59 @@ class TokenizedData:
             with gfile.GFile(fp, mode="rb") as f:
                 counter = 0
                 conversation = []
-                if counter < self.hparams.example_num:
-                    for line in f:
-                        line = tf.compat.as_bytes(line)
-                        counter += 1
-                        if counter % 100000 == 0:
-                            print("  processing line %d" % counter)
-                        decoded_str=line.decode('utf-8')
-                        
-                        if decoded_str.startswith('M')  and len(decoded_str) > 1:
-                            conversation.append(line)
-                        else:
-                            if decoded_str.startswith('E')  and len(decoded_str) <= 1:
-                                print('segment line is detected')
-                                for i,each_chat in enumerate(conversation):
-                                    if i % 2 == 0:
-                                        src_data.append(each_chat)
-                                    else:
-                                        tgt_data.append(each_chat)
-                                conversation = []
+                for line in f:
+                    if counter > self.hparams.example_num:
+                        break
+                    line = tf.compat.as_bytes(line)
+                    counter += 1
+                    if counter % 100000 == 0:
+                        print("  processing line %d" % counter)
+                    decoded_str=line.decode('utf-8')
+                    
+                    if decoded_str.startswith('M')  and len(decoded_str) > 1:
+                        conversation.append(decoded_str)
+                    else:
+                        if decoded_str.startswith('E')  and len(decoded_str) <= 2:
+                            #print('segment line is detected')
+                            for i,each_chat in enumerate(conversation):
+                                if i % 2 == 0:
+                                    src_data.append(each_chat[2:-1])
+                                else:
+                                    tgt_data.append(each_chat[2:-1])
+                            conversation = []
                             
 
 
         src_tgt_dataset = tf.data.Dataset.zip((tf.data.Dataset.from_tensor_slices(src_data), tf.data.Dataset.from_tensor_slices(tgt_data)))
         self.text_set = src_tgt_dataset
 
-
+    def map_pyfunct(self, src, tgt):
+        return [word for word in src.decode()],[word for word in tgt.decode()],1
+    
+    def map_split_func(self, src, tgt):
+        return tf.py_func(self.map_pyfunct, [src, tgt], [tf.string, tf.string, tf.int64])
+    
     def _convert_to_tokens(self, buffer_size):
         # The following 3 steps act as a python String lower() function
         # Split to characters
-        self.text_set = self.text_set.map(lambda src, tgt:
-                                          (tf.string_split([src], delimiter='').values,
-                                           tf.string_split([tgt], delimiter='').values)
-                                          ).prefetch(buffer_size)
+        self.text_set = self.text_set.map(self.map_split_func).prefetch(buffer_size)
+        
+        '''
+        dataset = self.text_set
+        dataset = dataset.batch(1)
+        inter = dataset.make_one_shot_iterator()
+        with tf.Session() as sess:
+            a = sess.run(inter.get_next())
+            print(a[0][0][0].decode())
+            print(a[0][0][0].decode())
+            print(a[1][0][0].decode())
+            print(a[1][0][1].decode())
+            print(a[1][0][2].decode())
+            print(a[1][0][3].decode())
+            print(a[1][0][4].decode())
+            print(a[1][0][5].decode())
+        '''
+        
         # Convert all upper case characters to lower case characters
         self.text_set = self.text_set.map(lambda src, tgt:
                                           (self.case_table.lookup(src), self.case_table.lookup(tgt))

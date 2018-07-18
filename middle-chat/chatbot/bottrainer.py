@@ -21,6 +21,7 @@ from chatbot.tokenizeddata import TokenizedData
 from chatbot.modelcreator import ModelCreator
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+#tf.enable_eager_execution()
 
 
 class BotTrainer(object):
