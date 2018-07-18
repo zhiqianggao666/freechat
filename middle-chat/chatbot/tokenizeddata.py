@@ -290,16 +290,14 @@ class TokenizedData:
         return tf.py_func(self.map_pyfunct, [src, tgt], [tf.string, tf.string, tf.int64])
     
     def _convert_to_tokens(self, buffer_size):
-        # The following 3 steps act as a python String lower() function
-        # Split to characters
         self.text_set = self.text_set.map(self.map_split_func).prefetch(buffer_size)
         
         '''
         dataset = self.text_set
         dataset = dataset.batch(1)
-        inter = dataset.make_one_shot_iterator()
+        iter = dataset.make_one_shot_iterator()
         with tf.Session() as sess:
-            a = sess.run(inter.get_next())
+            a = sess.run(iter.get_next())
             print(a[0][0][0].decode())
             print(a[0][0][0].decode())
             print(a[1][0][0].decode())
@@ -309,37 +307,25 @@ class TokenizedData:
             print(a[1][0][4].decode())
             print(a[1][0][5].decode())
         '''
-        
-        # Convert all upper case characters to lower case characters
-        self.text_set = self.text_set.map(lambda src, tgt:
-                                          (self.case_table.lookup(src), self.case_table.lookup(tgt))
-                                          ).prefetch(buffer_size)
-        # Join characters back to strings
-        self.text_set = self.text_set.map(lambda src, tgt:
-                                          (tf.reduce_join([src]), tf.reduce_join([tgt]))
-                                          ).prefetch(buffer_size)
 
-        # Split to word tokens
-        self.text_set = self.text_set.map(lambda src, tgt:
-                                          (tf.string_split([src]).values, tf.string_split([tgt]).values)
-                                          ).prefetch(buffer_size)
-        # Remove sentences longer than the model allows
-        self.text_set = self.text_set.map(lambda src, tgt:
-                                          (src[:self.src_max_len], tgt[:self.tgt_max_len])
-                                          ).prefetch(buffer_size)
-
-        # Reverse the source sentence if applicable
-        if self.hparams.source_reverse:
-            self.text_set = self.text_set.map(lambda src, tgt:
-                                              (tf.reverse(src, axis=[0]), tgt)
-                                              ).prefetch(buffer_size)
-
-        # Convert the word strings to ids.  Word strings that are not in the vocab get
-        # the lookup table's default_value integer.
-        self.id_set = self.text_set.map(lambda src, tgt:
+        self.id_set = self.text_set.map(lambda src, tgt,index:
                                         (tf.cast(self.vocab_table.lookup(src), tf.int32),
                                          tf.cast(self.vocab_table.lookup(tgt), tf.int32))
                                         ).prefetch(buffer_size)
+        '''
+        dataset = self.id_set
+        dataset = dataset.batch(1)
+        iter = dataset.make_initializable_iterator()
+        with tf.Session() as sess:
+            sess.run(tf.global_variables_initializer())
+            sess.run(tf.tables_initializer())
+            sess.run(iter.initializer)
+            a = sess.run(iter.get_next())
+            print(a[0])
+            print(a[1])
+            a=1
+        '''
+  
 
 
 def check_vocab(vocab_file):
