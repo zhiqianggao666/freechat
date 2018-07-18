@@ -4,10 +4,14 @@
   "batch_size": 256,
   "batch_size_infer": 1,
   "beam_width": 5,
+  "pad_id": 0,
+  "pad_token": "_pad_",
   "bos_id": 1,
   "bos_token": "_bos_",
   "eos_id": 2,
   "eos_token": "_eos_",
+  "unk_id": 3,
+  "unk_token": "_unk_",
   "init_op": "uniform",
   "init_weight": 0.1,
   "keep_prob": 0.9,
@@ -26,8 +30,6 @@
   "tgt_max_len": 50,
   "tgt_max_len_infer": 50,
   "time_major": true,
-  "unk_token": "_unk_",
-  "unk_id": 0,
   "example_num":100000,
   "vocab_size":10000
 }

@@ -19,26 +19,15 @@ import tensorflow as tf
 from collections import namedtuple
 from tensorflow.python.ops import lookup_ops
 from tensorflow.python.platform import gfile
-import tensorflow.contrib.eager as tfe
 from chatbot.hparams import HParams
 import unicodedata
 import re
 import jieba
 
-COMMENT_LINE_STT = "#=="
-CONVERSATION_SEP = "==="
 
 AUG0_FOLDER = "Augment0"
 
-MAX_LEN = 1000  # Assume no line in the training data is having more than this number of characters
 VOCAB_FILE = "vocab.txt"
-
-_PAD = b"_PAD"
-
-PAD_ID = 0
-GO_ID = 1
-EOS_ID = 2
-UNK_ID = 3
 
 
 def split_chinese(sentence):
@@ -80,7 +69,7 @@ def create_vocab(file_dir, vocab_file,hparams):
                                 vocab[word] += 1
                             else:
                                 vocab[word] = 1
-        vocab_list = [hparams.bos_token,hparams.eos_token,hparams.unk_token] + sorted(vocab, key=vocab.get, reverse=True)
+        vocab_list = [hparams.pad_token,hparams.bos_token,hparams.eos_token,hparams.unk_token] + sorted(vocab, key=vocab.get, reverse=True)
         
         print('>> Full Vocabulary Size :', len(vocab_list))
         if len(vocab_list) > hparams.vocab_size:
@@ -139,14 +128,27 @@ class TokenizedData:
         buffer_size = self.hparams.batch_size * 400
 
         # Comment this line for debugging.
-        train_set = self.id_set.shuffle(buffer_size=buffer_size)
+        #train_set = self.id_set.shuffle(buffer_size=buffer_size)
 
         # Create a target input prefixed with BOS and a target output suffixed with EOS.
         # After this mapping, each element in the train_set contains 3 columns/items.
-        train_set = train_set.map(lambda src, tgt:
+        train_set = self.id_set.map(lambda src, tgt:
                                   (src, tf.concat(([self.hparams.bos_id], tgt), 0),
                                    tf.concat((tgt, [self.hparams.eos_id]), 0)),
                                   num_parallel_calls=num_threads).prefetch(buffer_size)
+
+        dataset = train_set
+        dataset = dataset.batch(1)
+        iter = dataset.make_initializable_iterator()
+        with tf.Session() as sess:
+            sess.run(tf.global_variables_initializer())
+            sess.run(tf.tables_initializer())
+            sess.run(iter.initializer)
+            a = sess.run(iter.get_next())
+            print(a[0])
+            print(a[1])
+            a = 1
+
 
         # Add in sequence lengths.
         train_set = train_set.map(lambda src, tgt_in, tgt_out:
@@ -270,7 +272,6 @@ class TokenizedData:
                         conversation.append(decoded_str)
                     else:
                         if decoded_str.startswith('E')  and len(decoded_str) <= 2:
-                            #print('segment line is detected')
                             for i,each_chat in enumerate(conversation):
                                 if i % 2 == 0:
                                     src_data.append(each_chat[2:-1])
@@ -327,7 +328,6 @@ class TokenizedData:
         '''
   
 
-
 def check_vocab(vocab_file):
     """Check to make sure vocab_file exists"""
     if tf.gfile.Exists(vocab_file):
@@ -339,18 +339,6 @@ def check_vocab(vocab_file):
         raise ValueError("The vocab_file does not exist. Please run the script to create it.")
 
     return len(vocab_list), vocab_list
-
-
-def prepare_case_table():
-    keys = tf.constant([chr(i) for i in range(32, 127)])
-
-    l1 = [chr(i) for i in range(32, 65)]
-    l2 = [chr(i) for i in range(97, 123)]
-    l3 = [chr(i) for i in range(91, 127)]
-    values = tf.constant(l1 + l2 + l3)
-
-    return tf.contrib.lookup.HashTable(
-        tf.contrib.lookup.KeyValueTensorInitializer(keys, values), ' ')
 
 
 class BatchedInput(namedtuple("BatchedInput",
