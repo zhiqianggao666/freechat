@@ -30,6 +30,6 @@
   "tgt_max_len": 50,
   "tgt_max_len_infer": 50,
   "time_major": true,
-  "example_num":100000,
+  "example_num":10000,
   "vocab_size":10000
 }
