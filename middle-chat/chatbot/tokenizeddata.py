@@ -23,7 +23,7 @@ from chatbot.hparams import HParams
 import unicodedata
 import re
 import jieba
-
+import numpy as np
 
 AUG0_FOLDER = "Augment0"
 
@@ -61,7 +61,7 @@ def create_vocab(file_dir, vocab_file,hparams):
                     decoded_str = line.decode('utf-8')
                     if counter % 100000 == 0:
                         print("  processing line %d" % counter)
-                    if decoded_str.startswith('M') and len(decoded_str) > 1:
+                    if decoded_str.startswith('M') and len(decoded_str) > 3:
                         tokens = split_chinese(decoded_str[2:-1])
                         for w in tokens:
                             word = w
@@ -137,6 +137,13 @@ class TokenizedData:
                                    tf.concat((tgt, [self.hparams.eos_id]), 0)),
                                   num_parallel_calls=num_threads).prefetch(buffer_size)
 
+
+        # Add in sequence lengths.
+        train_set = train_set.map(lambda src, tgt_in, tgt_out:
+                                  (src, tgt_in, tgt_out, tf.size(src), tf.size(tgt_in)),
+                                  num_parallel_calls=num_threads).prefetch(buffer_size)
+        
+        '''
         dataset = train_set
         dataset = dataset.batch(1)
         iter = dataset.make_initializable_iterator()
@@ -148,13 +155,9 @@ class TokenizedData:
             print(a[0])
             print(a[1])
             a = 1
-
-
-        # Add in sequence lengths.
-        train_set = train_set.map(lambda src, tgt_in, tgt_out:
-                                  (src, tgt_in, tgt_out, tf.size(src), tf.size(tgt_in)),
-                                  num_parallel_calls=num_threads).prefetch(buffer_size)
-
+        '''
+        
+            
         def batching_func(x):
             return x.padded_batch(
                 self.hparams.batch_size,
@@ -197,6 +200,21 @@ class TokenizedData:
             batched_dataset = batching_func(train_set)
 
         batched_iter = batched_dataset.make_initializable_iterator()
+        
+        '''
+        with tf.Session() as sess:
+            sess.run(tf.global_variables_initializer())
+            sess.run(tf.tables_initializer())
+            sess.run(batched_iter.initializer)
+            a = sess.run(batched_iter.get_next())
+            print(a[0])
+            print(a[1])
+            print(a[2])
+            print(a[3])
+            print(a[4])
+            a = 1
+        '''
+            
         (src_ids, tgt_input_ids, tgt_output_ids, src_seq_len, tgt_seq_len) = (batched_iter.get_next())
 
         return BatchedInput(initializer=batched_iter.initializer,
@@ -267,11 +285,14 @@ class TokenizedData:
                     if counter % 100000 == 0:
                         print("  processing line %d" % counter)
                     decoded_str=line.decode('utf-8')
-                    
-                    if decoded_str.startswith('M')  and len(decoded_str) > 1:
+                    if counter  == 8291:
+                        print(" decoded_str : %s" , decoded_str)
+                    if decoded_str.startswith('M')  and len(decoded_str) > 3:
                         conversation.append(decoded_str)
                     else:
                         if decoded_str.startswith('E')  and len(decoded_str) <= 2:
+                            if len(conversation) % 2 != 0:
+                                conversation=conversation[:-1]
                             for i,each_chat in enumerate(conversation):
                                 if i % 2 == 0:
                                     src_data.append(each_chat[2:-1])
@@ -288,7 +309,8 @@ class TokenizedData:
         return [word for word in src.decode()],[word for word in tgt.decode()],1
     
     def map_split_func(self, src, tgt):
-        return tf.py_func(self.map_pyfunct, [src, tgt], [tf.string, tf.string, tf.int64])
+        a = tf.py_func(self.map_pyfunct, [src, tgt], [tf.string, tf.string, tf.int64])
+        return a
     
     def _convert_to_tokens(self, buffer_size):
         self.text_set = self.text_set.map(self.map_split_func).prefetch(buffer_size)
