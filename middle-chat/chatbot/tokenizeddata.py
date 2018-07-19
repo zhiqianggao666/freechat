@@ -224,16 +224,24 @@ class TokenizedData:
                             source_sequence_length=src_seq_len,
                             target_sequence_length=tgt_seq_len)
 
-    def get_inference_batch(self, src_dataset):
-        text_dataset = src_dataset.map(lambda src: tf.string_split([src]).values)
+    def map_pyfunct_infer(self, src):
+        return [word for word in src.decode()], 1
 
+    def map_split_func_infer(self, src):
+        a = tf.py_func(self.map_pyfunct_infer, [src], [tf.string, tf.int64])
+        return a
+    
+    def get_inference_batch(self, src_dataset):
+        text_dataset = src_dataset.map(self.map_split_func_infer)
+        
+        id_dataset = text_dataset.map(lambda src,index:  tf.cast(self.vocab_table.lookup(src), tf.int32))
+        
         if self.hparams.src_max_len_infer:
-            text_dataset = text_dataset.map(lambda src: src[:self.hparams.src_max_len_infer])
-        # Convert the word strings to ids
-        id_dataset = text_dataset.map(lambda src: tf.cast(self.vocab_table.lookup(src),
-                                                          tf.int32))
+            id_dataset = id_dataset.map(lambda src: src[:self.hparams.src_max_len_infer])
+        
         if self.hparams.source_reverse:
             id_dataset = id_dataset.map(lambda src: tf.reverse(src, axis=[0]))
+            
         # Add in the word counts.
         id_dataset = id_dataset.map(lambda src: (src, tf.size(src)))
 
