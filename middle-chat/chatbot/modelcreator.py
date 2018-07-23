@@ -101,7 +101,7 @@ class ModelCreator(object):
 
         # Saver
         self.saver = tf.train.Saver(tf.global_variables())
-
+        print(tf.global_variables())
         # Print trainable variables
         if training:
             print("# Trainable variables:")

@@ -50,13 +50,21 @@ class BotPredictor(object):
 
         self.hparams = tokenized_data.hparams
         self.src_placeholder = tf.placeholder(shape=[None], dtype=tf.string)
-        src_dataset = tf.data.Dataset.from_tensor_slices(self.src_placeholder)
+        src_dataset = tf.data.Dataset.from_generator(lambda :self.src_placeholder, output_types=tf.string)
         self.infer_batch = tokenized_data.get_inference_batch(src_dataset)
 
         # Create model
         print("# Creating inference model ...")
         self.model = ModelCreator(training=False, tokenized_data=tokenized_data,
                                   batch_input=self.infer_batch)
+        
+        
+        ckpt=tf.train.get_checkpoint_state(os.path.join(result_dir, result_file))
+        checkpointlist=self.model.saver.last_checkpoints
+        print(checkpointlist)  # empty?
+        print("ckpt",ckpt)  # just last one
+        
+        
         # Restore model weights
         print("# Restoring model weights ...")
         self.model.saver.restore(session, os.path.join(result_dir, result_file))

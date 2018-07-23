@@ -233,9 +233,9 @@ class TokenizedData:
     
     def get_inference_batch(self, src_dataset):
         #text_dataset = src_dataset.map(self.map_split_func_infer)
-        text_dataset = src_dataset.map(lambda src:tf.string_split(src))
+        #text_dataset = src_dataset.map(lambda src:tf.string_split(src))
 
-        id_dataset = text_dataset.map(lambda src:  tf.cast(self.vocab_table.lookup(src), tf.int32))
+        id_dataset = src_dataset.map(lambda src:  tf.cast(self.vocab_table.lookup(src), tf.int32))
         
         if self.hparams.src_max_len_infer:
             id_dataset = id_dataset.map(lambda src: src[:self.hparams.src_max_len_infer])
@@ -324,7 +324,7 @@ class TokenizedData:
     
     def _convert_to_tokens(self, buffer_size):
         #self.text_set = self.text_set.map(self.map_split_func).prefetch(buffer_size)
-        self.text_set = self.text_set.map(lambda src,tgt:(tf.string_split(src), tf.string_split(tgt))).prefetch(buffer_size)
+       # self.text_set = self.text_set.map(lambda src,tgt:(tf.string_split(src), tf.string_split(tgt))).prefetch(buffer_size)
 
         '''
         dataset = self.text_set
