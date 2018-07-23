@@ -45,8 +45,21 @@ dataset2 = dataset2.batch(1)
 iter2 = dataset2.make_one_shot_iterator()
 
 
+
+
+src_data = [list(u'我爱南京'), list(u'你好啊啊啊')]
+tgt_data = [list(u'你是谁'), list(u'嗯嗯')]
+dataset3 = tf.data.Dataset.zip((tf.data.Dataset.from_generator(lambda: src_data, tf.string),
+                                       tf.data.Dataset.from_generator(lambda: tgt_data, tf.string)))
+dataset3 = dataset3.batch(1)
+iter3 = dataset3.make_one_shot_iterator()
+
+
 with tf.Session() as sess:
     print(sess.run(str).decode())
     print(sess.run(iter.get_next())[0][0][0].decode())
     print(sess.run(iter2.get_next()))
+    print(sess.run(iter3.get_next()))
+    print(sess.run(iter3.get_next()))
+
     

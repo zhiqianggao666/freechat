@@ -232,9 +232,10 @@ class TokenizedData:
         return a
     
     def get_inference_batch(self, src_dataset):
-        text_dataset = src_dataset.map(self.map_split_func_infer)
-        
-        id_dataset = text_dataset.map(lambda src,index:  tf.cast(self.vocab_table.lookup(src), tf.int32))
+        #text_dataset = src_dataset.map(self.map_split_func_infer)
+        text_dataset = src_dataset.map(lambda src:tf.string_split(src))
+
+        id_dataset = text_dataset.map(lambda src:  tf.cast(self.vocab_table.lookup(src), tf.int32))
         
         if self.hparams.src_max_len_infer:
             id_dataset = id_dataset.map(lambda src: src[:self.hparams.src_max_len_infer])
@@ -293,8 +294,8 @@ class TokenizedData:
                     if counter % 100000 == 0:
                         print("  processing line %d" % counter)
                     decoded_str=line.decode('utf-8')
-                    if counter  == 8291:
-                        print(" decoded_str : %s" , decoded_str)
+                    #if counter  == 8291:
+                    #    print(" decoded_str : %s" , decoded_str)
                     if decoded_str.startswith('M')  and len(decoded_str) > 3:
                         conversation.append(decoded_str)
                     else:
@@ -303,14 +304,15 @@ class TokenizedData:
                                 conversation=conversation[:-1]
                             for i,each_chat in enumerate(conversation):
                                 if i % 2 == 0:
-                                    src_data.append(each_chat[2:-1])
+                                    src_data.append(list(each_chat[2:-1]))
                                 else:
-                                    tgt_data.append(each_chat[2:-1])
+                                    tgt_data.append(list(each_chat[2:-1]))
                             conversation = []
                             
 
+        src_tgt_dataset = tf.data.Dataset.zip((tf.data.Dataset.from_generator(lambda :src_data, tf.string), tf.data.Dataset.from_generator(lambda :tgt_data, tf.string)))
 
-        src_tgt_dataset = tf.data.Dataset.zip((tf.data.Dataset.from_tensor_slices(src_data), tf.data.Dataset.from_tensor_slices(tgt_data)))
+        #src_tgt_dataset = tf.data.Dataset.zip((tf.data.Dataset.from_tensor_slices(src_data), tf.data.Dataset.from_tensor_slices(tgt_data)))
         self.text_set = src_tgt_dataset
 
     def map_pyfunct(self, src, tgt):
@@ -321,8 +323,9 @@ class TokenizedData:
         return a
     
     def _convert_to_tokens(self, buffer_size):
-        self.text_set = self.text_set.map(self.map_split_func).prefetch(buffer_size)
-        
+        #self.text_set = self.text_set.map(self.map_split_func).prefetch(buffer_size)
+        self.text_set = self.text_set.map(lambda src,tgt:(tf.string_split(src), tf.string_split(tgt))).prefetch(buffer_size)
+
         '''
         dataset = self.text_set
         dataset = dataset.batch(1)
@@ -339,7 +342,7 @@ class TokenizedData:
             print(a[1][0][5].decode())
         '''
 
-        self.id_set = self.text_set.map(lambda src, tgt,index:
+        self.id_set = self.text_set.map(lambda src, tgt:
                                         (tf.cast(self.vocab_table.lookup(src), tf.int32),
                                          tf.cast(self.vocab_table.lookup(tgt), tf.int32))
                                         ).prefetch(buffer_size)
@@ -356,6 +359,7 @@ class TokenizedData:
             print(a[1])
             a=1
         '''
+        
   
 
 def check_vocab(vocab_file):
