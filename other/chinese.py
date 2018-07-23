@@ -37,9 +37,16 @@ def map_funct2(line):
 dataset = tf.data.TextLineDataset('/home/tizen/share/charmpy/tf/cmn-eng/b.txt')
 dataset = dataset.map(map_funct2)
 dataset = dataset.batch(1)
-inter = dataset.make_one_shot_iterator()
+iter = dataset.make_one_shot_iterator()
+
+
+dataset2 = tf.data.Dataset.from_tensor_slices(list(u'我爱南京'))
+dataset2 = dataset2.batch(1)
+iter2 = dataset2.make_one_shot_iterator()
+
 
 with tf.Session() as sess:
     print(sess.run(str).decode())
-    print(sess.run(inter.get_next())[0][0][0].decode())
+    print(sess.run(iter.get_next())[0][0][0].decode())
+    print(sess.run(iter2.get_next()))
     
