@@ -55,12 +55,16 @@ dataset3 = tf.data.Dataset.zip((tf.data.Dataset.from_generator(lambda: src_data,
 dataset3 = dataset3.batch(1)
 iter3 = dataset3.make_one_shot_iterator()
 
+dataset4=tf.data.Dataset.from_tensor_slices(list(u'我还喜欢她,怎么办'))
+#dataset4=tf.data.Dataset.from_tensor_slices([list(u'我还喜欢她,怎么办')])
+#dataset4 = dataset4.batch(1)
+iter4 = dataset4.make_one_shot_iterator()
 
 with tf.Session() as sess:
     print(sess.run(str).decode())
     print(sess.run(iter.get_next())[0][0][0].decode())
     print(sess.run(iter2.get_next()))
     print(sess.run(iter3.get_next()))
-    print(sess.run(iter3.get_next()))
+    print(sess.run(iter4.get_next()))
 
     
