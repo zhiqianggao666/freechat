@@ -44,7 +44,8 @@ dataset2 = tf.data.Dataset.from_tensor_slices(list(u'我爱南京'))
 dataset2 = dataset2.batch(1)
 iter2 = dataset2.make_one_shot_iterator()
 
-
+#from_tensor_slices, all data should be same size
+#from_generator, size can be different
 
 
 src_data = [list(u'我爱南京'), list(u'你好啊啊啊')]
