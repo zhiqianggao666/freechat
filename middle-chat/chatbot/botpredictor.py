@@ -16,6 +16,7 @@ import nltk
 import os
 import string
 import tensorflow as tf
+import numpy as np
 
 from chatbot.tokenizeddata import TokenizedData
 from chatbot.modelcreator import ModelCreator
@@ -50,7 +51,8 @@ class BotPredictor(object):
 
         self.hparams = tokenized_data.hparams
         self.src_placeholder = tf.placeholder(shape=[None], dtype=tf.string)
-        src_dataset = tf.data.Dataset.from_generator(lambda :self.src_placeholder, output_types=tf.string)
+        src_dataset=tf.data.Dataset.from_tensor_slices([self.src_placeholder])
+        #src_dataset = tf.data.Dataset.from_generator(lambda : self.src_placeholder, output_types=tf.string)
         self.infer_batch = tokenized_data.get_inference_batch(src_dataset)
 
         # Create model
@@ -86,9 +88,10 @@ class BotPredictor(object):
         for pre_time in range(2):
             tokens = nltk.word_tokenize(new_sentence.lower())
             tmp_sentence = [' '.join(tokens[:]).strip()]
-
+            a = list(question)
+            #c=np.array(list(question))
             self.session.run(self.infer_batch.initializer,
-                             feed_dict={self.src_placeholder: tmp_sentence})
+                             feed_dict={self.src_placeholder: a})
 
             outputs, _ = self.model.infer(self.session)
 
