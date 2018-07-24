@@ -109,6 +109,11 @@ class BotTrainer(object):
             # Done training
             self.model.saver.save(sess, os.path.join(result_dir, "basic"), global_step=global_step)
             summary_writer.close()
+            ckpt = tf.train.get_checkpoint_state(result_dir)
+            checkpointlist = self.model.saver.last_checkpoints
+            print(checkpointlist)  # empty?
+            print("ckpt", ckpt)  # just last one
+
 
     @staticmethod
     def _get_learning_rate(perplexity):

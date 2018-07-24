@@ -59,15 +59,16 @@ class BotPredictor(object):
                                   batch_input=self.infer_batch)
         
         
-        ckpt=tf.train.get_checkpoint_state(os.path.join(result_dir, result_file))
+        ckpt=tf.train.get_checkpoint_state(result_dir)
+        print("ckpt",ckpt)  # just last one
+
         checkpointlist=self.model.saver.last_checkpoints
         print(checkpointlist)  # empty?
-        print("ckpt",ckpt)  # just last one
         
         
         # Restore model weights
         print("# Restoring model weights ...")
-        self.model.saver.restore(session, os.path.join(result_dir, result_file))
+        self.model.saver.restore(session, ckpt.model_checkpoint_path)
 
         self.session.run(tf.tables_initializer())
 
