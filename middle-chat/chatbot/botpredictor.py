@@ -42,22 +42,21 @@ class BotPredictor(object):
 
         # Prepare data and hyper parameters
         print("# Prepare dataset placeholder and hyper parameters ...")
-        tokenized_data = TokenizedData(corpus_dir=corpus_dir, training=False)
-
+        self.tokenized_data = TokenizedData(corpus_dir=corpus_dir, training=False)
         self.knowledge_base = KnowledgeBase()
         self.knowledge_base.load_knbase(knbase_dir)
 
         self.session_data = SessionData()
 
-        self.hparams = tokenized_data.hparams
+        self.hparams = self.tokenized_data.hparams
         self.src_placeholder = tf.placeholder(shape=[None], dtype=tf.string)
-        src_dataset=tf.data.Dataset.from_tensor_slices([self.src_placeholder])
-        #src_dataset = tf.data.Dataset.from_generator(lambda : self.src_placeholder, output_types=tf.string)
-        self.infer_batch = tokenized_data.get_inference_batch(src_dataset)
+        self.src_dataset=tf.data.Dataset.from_tensor_slices([self.src_placeholder])
+        #self.src_dataset = tf.data.Dataset.from_generator(lambda : self.src_placeholder, output_types=tf.string)
+        self.infer_batch = self.tokenized_data.get_inference_batch(self.src_dataset)
 
         # Create model
         print("# Creating inference model ...")
-        self.model = ModelCreator(training=False, tokenized_data=tokenized_data,
+        self.model = ModelCreator(training=False, tokenized_data=self.tokenized_data,
                                   batch_input=self.infer_batch)
         
         
@@ -92,7 +91,17 @@ class BotPredictor(object):
             #c=np.array(list(question))
             self.session.run(self.infer_batch.initializer,
                              feed_dict={self.src_placeholder: a})
-
+            
+            '''
+            dataset = self.tokenized_data.print_data()
+            iter = dataset.make_initializable_iterator()
+            with tf.Session() as sess:
+                sess.run(tf.global_variables_initializer())
+                sess.run(tf.tables_initializer())
+                sess.run(iter.initializer, feed_dict={self.src_placeholder: a})
+                b = sess.run(iter.get_next(), feed_dict={self.src_placeholder: a})
+                c = 1
+            '''
             outputs, _ = self.model.infer(self.session)
 
             if self.hparams.beam_width > 0:

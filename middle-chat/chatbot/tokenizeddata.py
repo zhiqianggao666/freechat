@@ -120,7 +120,9 @@ class TokenizedData:
             self.reverse_vocab_table = \
                 lookup_ops.index_to_string_table_from_file(vocab_file,
                                                            default_value=self.hparams.unk_token)
+        
 
+        
 
     def get_training_batch(self, num_threads=4):
         assert self.training
@@ -231,7 +233,12 @@ class TokenizedData:
         a = tf.py_func(self.map_pyfunct_infer, [src], [tf.string, tf.int64])
         return a
     
+    def print_data(self):
+        id_dataset = self.src_dataset.map(lambda src: tf.cast(self.vocab_table.lookup(src), tf.int32))
+        return id_dataset
+    
     def get_inference_batch(self, src_dataset):
+        self.src_dataset = src_dataset
         #text_dataset = src_dataset.map(self.map_split_func_infer)
         #text_dataset = src_dataset.map(lambda src:tf.string_split(src))
 
@@ -239,7 +246,7 @@ class TokenizedData:
         
         if self.hparams.src_max_len_infer:
             id_dataset = id_dataset.map(lambda src: src[:self.hparams.src_max_len_infer])
-        
+
         if self.hparams.source_reverse:
             id_dataset = id_dataset.map(lambda src: tf.reverse(src, axis=[0]))
             
