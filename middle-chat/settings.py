@@ -13,5 +13,6 @@
 # limitations under the License.
 # ==============================================================================
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "2,3"
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
