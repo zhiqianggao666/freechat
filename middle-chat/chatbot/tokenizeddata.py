@@ -130,7 +130,7 @@ class TokenizedData:
         buffer_size = self.hparams.batch_size * 400
 
         # Comment this line for debugging.
-        #train_set = self.id_set.shuffle(buffer_size=buffer_size)
+        train_set = self.id_set.shuffle(buffer_size=buffer_size)
 
         # Create a target input prefixed with BOS and a target output suffixed with EOS.
         # After this mapping, each element in the train_set contains 3 columns/items.
