@@ -1,0 +1,123 @@
+"example_num":200000,
+"num_layers": 2,
+"batch_size": 256,
+# Training loop started @ 2018-07-25 16:16:33
+# Finished epoch  1 @ step   263 @ 2018-07-25 16:18:09. In the epoch, learning rate = 0.000800, mean loss = 5.9746, perplexity = 393.3183, and 95.75 seconds elapsed.
+# Finished epoch  2 @ step   526 @ 2018-07-25 16:19:32. In the epoch, learning rate = 0.000800, mean loss = 4.7395, perplexity = 114.3741, and 83.73 seconds elapsed.
+# Finished epoch  3 @ step   789 @ 2018-07-25 16:20:57. In the epoch, learning rate = 0.000800, mean loss = 4.1226, perplexity =  61.7176, and 84.51 seconds elapsed.
+# Finished epoch  4 @ step  1052 @ 2018-07-25 16:22:22. In the epoch, learning rate = 0.000800, mean loss = 3.7554, perplexity =  42.7513, and 84.97 seconds elapsed.
+# Finished epoch  5 @ step  1315 @ 2018-07-25 16:23:45. In the epoch, learning rate = 0.000800, mean loss = 3.4309, perplexity =  30.9039, and 82.84 seconds elapsed.
+
+
+"example_num":200000,
+"num_layers": 3,
+"batch_size": 256,
+OOM
+
+"example_num":200000,
+"num_layers": 3,
+"batch_size": 128,
+# Training loop started @ 2018-07-25 16:30:28
+# Finished epoch  1 @ step   523 @ 2018-07-25 16:32:44. In the epoch, learning rate = 0.000800, mean loss = 5.7206, perplexity = 305.0857, and 135.75 seconds elapsed.
+# Finished epoch  2 @ step  1046 @ 2018-07-25 16:34:51. In the epoch, learning rate = 0.000800, mean loss = 4.5556, perplexity =  95.1647, and 127.10 seconds elapsed.
+# Finished epoch  3 @ step  1569 @ 2018-07-25 16:36:59. In the epoch, learning rate = 0.000800, mean loss = 4.0990, perplexity =  60.2773, and 128.67 seconds elapsed.
+# Finished epoch  4 @ step  2092 @ 2018-07-25 16:39:07. In the epoch, learning rate = 0.000800, mean loss = 3.7678, perplexity =  43.2843, and 127.44 seconds elapsed.
+# Finished epoch  5 @ step  2615 @ 2018-07-25 16:41:14. In the epoch, learning rate = 0.000800, mean loss = 3.4778, perplexity =  32.3868, and 127.35 seconds elapsed.
+
+
+"example_num":200000,
+"num_layers": 2,
+"batch_size": 128,
+# Training loop started @ 2018-07-25 16:42:44
+# Finished epoch  1 @ step   523 @ 2018-07-25 16:44:33. In the epoch, learning rate = 0.000800, mean loss = 5.5438, perplexity = 255.6462, and 108.87 seconds elapsed.
+# Finished epoch  2 @ step  1046 @ 2018-07-25 16:46:16. In the epoch, learning rate = 0.000800, mean loss = 4.2935, perplexity =  73.2240, and 102.96 seconds elapsed.
+# Finished epoch  3 @ step  1569 @ 2018-07-25 16:47:59. In the epoch, learning rate = 0.000800, mean loss = 3.7977, perplexity =  44.5991, and 103.12 seconds elapsed.
+# Finished epoch  4 @ step  2092 @ 2018-07-25 16:49:42. In the epoch, learning rate = 0.000800, mean loss = 3.4270, perplexity =  30.7854, and 103.13 seconds elapsed.
+# Finished epoch  5 @ step  2615 @ 2018-07-25 16:51:25. In the epoch, learning rate = 0.000600, mean loss = 3.0179, perplexity =  20.4484, and 103.41 seconds elapsed.
+
+
+"example_num":200000,
+"num_layers": 2,
+"batch_size": 64,
+# Training loop started @ 2018-07-25 16:53:07
+# Finished epoch  1 @ step  1043 @ 2018-07-25 16:55:55. In the epoch, learning rate = 0.000800, mean loss = 5.2576, perplexity = 192.0234, and 167.14 seconds elapsed.
+# Finished epoch  2 @ step  2086 @ 2018-07-25 16:58:38. In the epoch, learning rate = 0.000800, mean loss = 4.1207, perplexity =  61.6051, and 163.59 seconds elapsed.
+# Finished epoch  3 @ step  3129 @ 2018-07-25 17:01:23. In the epoch, learning rate = 0.000800, mean loss = 3.6520, perplexity =  38.5530, and 164.45 seconds elapsed.
+# Finished epoch  4 @ step  4172 @ 2018-07-25 17:04:06. In the epoch, learning rate = 0.000800, mean loss = 3.2998, perplexity =  27.1066, and 163.01 seconds elapsed.
+# Finished epoch  5 @ step  5215 @ 2018-07-25 17:06:54. In the epoch, learning rate = 0.000600, mean loss = 2.8979, perplexity =  18.1356, and 168.61 seconds elapsed.
+
+"example_num":200000,
+"num_layers": 2,
+"batch_size": 64,
+# Training loop started @ 2018-07-25 17:08:30
+# Finished epoch  1 @ step  1043 @ 2018-07-25 17:11:23. In the epoch, learning rate = 0.000800, mean loss = 5.2150, perplexity = 184.0127, and 172.32 seconds elapsed.
+# Finished epoch  2 @ step  2086 @ 2018-07-25 17:14:12. In the epoch, learning rate = 0.000800, mean loss = 4.1123, perplexity =  61.0852, and 169.13 seconds elapsed.
+# Finished epoch  3 @ step  3129 @ 2018-07-25 17:16:57. In the epoch, learning rate = 0.000800, mean loss = 3.6476, perplexity =  38.3834, and 165.65 seconds elapsed.
+# Finished epoch  4 @ step  4172 @ 2018-07-25 17:19:41. In the epoch, learning rate = 0.000800, mean loss = 3.2982, perplexity =  27.0634, and 163.11 seconds elapsed.
+# Finished epoch  5 @ step  5215 @ 2018-07-25 17:22:24. In the epoch, learning rate = 0.000600, mean loss = 2.8952, perplexity =  18.0879, and 163.43 seconds elapsed.
+# Finished epoch  6 @ step  6258 @ 2018-07-25 17:25:08. In the epoch, learning rate = 0.000600, mean loss = 2.6339, perplexity =  13.9279, and 163.66 seconds elapsed.
+# Finished epoch  7 @ step  7301 @ 2018-07-25 17:27:51. In the epoch, learning rate = 0.000400, mean loss = 2.3196, perplexity =  10.1719, and 163.49 seconds elapsed.
+# Finished epoch  8 @ step  8344 @ 2018-07-25 17:30:34. In the epoch, learning rate = 0.000400, mean loss = 2.1196, perplexity =   8.3278, and 163.20 seconds elapsed.
+# Finished epoch  9 @ step  9387 @ 2018-07-25 17:33:17. In the epoch, learning rate = 0.000400, mean loss = 1.9789, perplexity =   7.2349, and 163.05 seconds elapsed.
+# Finished epoch 10 @ step 10430 @ 2018-07-25 17:36:01. In the epoch, learning rate = 0.000320, mean loss = 1.8143, perplexity =   6.1367, and 163.27 seconds elapsed.
+# Finished epoch 11 @ step 11473 @ 2018-07-25 17:38:45. In the epoch, learning rate = 0.000320, mean loss = 1.6953, perplexity =   5.4484, and 163.87 seconds elapsed.
+# Finished epoch 12 @ step 12516 @ 2018-07-25 17:41:28. In the epoch, learning rate = 0.000320, mean loss = 1.6069, perplexity =   4.9872, and 163.92 seconds elapsed.
+# Finished epoch 13 @ step 13559 @ 2018-07-25 17:44:12. In the epoch, learning rate = 0.000320, mean loss = 1.5368, perplexity =   4.6496, and 163.20 seconds elapsed.
+# Finished epoch 14 @ step 14602 @ 2018-07-25 17:46:55. In the epoch, learning rate = 0.000240, mean loss = 1.4202, perplexity =   4.1381, and 163.76 seconds elapsed.
+# Finished epoch 15 @ step 15645 @ 2018-07-25 17:49:47. In the epoch, learning rate = 0.000240, mean loss = 1.3295, perplexity =   3.7792, and 171.23 seconds elapsed.
+# Finished epoch 16 @ step 16688 @ 2018-07-25 17:56:49. In the epoch, learning rate = 0.000240, mean loss = 1.2735, perplexity =   3.5734, and 421.92 seconds elapsed.
+# Finished epoch 17 @ step 17731 @ 2018-07-25 18:04:04. In the epoch, learning rate = 0.000240, mean loss = 1.2258, perplexity =   3.4071, and 435.33 seconds elapsed.
+# Finished epoch 18 @ step 18774 @ 2018-07-25 18:10:14. In the epoch, learning rate = 0.000240, mean loss = 1.1821, perplexity =   3.2611, and 370.14 seconds elapsed.
+# Finished epoch 19 @ step 19817 @ 2018-07-25 18:17:28. In the epoch, learning rate = 0.000240, mean loss = 1.1417, perplexity =   3.1320, and 434.28 seconds elapsed.
+# Finished epoch 20 @ step 20860 @ 2018-07-25 18:24:21. In the epoch, learning rate = 0.000200, mean loss = 1.0789, perplexity =   2.9413, and 412.75 seconds elapsed.
+
+
+"example_num":200000,
+"num_layers": 2,
+"batch_size": 64,
+# Training loop started @ 2018-07-26 08:57:01
+# Finished epoch  1 @ step  1043 @ 2018-07-26 08:59:51. In the epoch, learning r                                                                           ate = 0.000800, mean loss = 5.2315, perplexity = 187.0689, and 169.17 seconds el                                                                           apsed.
+# Finished epoch  2 @ step  2086 @ 2018-07-26 09:02:36. In the epoch, learning r                                                                           ate = 0.000800, mean loss = 4.1295, perplexity =  62.1445, and 165.47 seconds el                                                                           apsed.
+# Finished epoch  3 @ step  3129 @ 2018-07-26 09:05:21. In the epoch, learning r                                                                           ate = 0.000800, mean loss = 3.6616, perplexity =  38.9218, and 165.15 seconds el                                                                           apsed.
+# Finished epoch  4 @ step  4172 @ 2018-07-26 09:08:05. In the epoch, learning r                                                                           ate = 0.000800, mean loss = 3.3037, perplexity =  27.2130, and 163.48 seconds el                                                                           apsed.
+# Finished epoch  5 @ step  5215 @ 2018-07-26 09:10:49. In the epoch, learning rate = 0.000600, mean loss = 2.9065, perplexity =  18.2928, and 164.07 seconds elapsed.
+# Finished epoch  6 @ step  6258 @ 2018-07-26 09:13:32. In the epoch, learning rate = 0.000600, mean loss = 2.6455, perplexity =  14.0911, and 163.32 seconds elapsed.
+# Finished epoch  7 @ step  7301 @ 2018-07-26 09:16:15. In the epoch, learning rate = 0.000400, mean loss = 2.3269, perplexity =  10.2458, and 163.11 seconds elapsed.
+# Finished epoch  8 @ step  8344 @ 2018-07-26 09:18:58. In the epoch, learning rate = 0.000400, mean loss = 2.1299, perplexity =   8.4136, and 163.01 seconds elapsed.
+# Finished epoch  9 @ step  9387 @ 2018-07-26 09:21:42. In the epoch, learning rate = 0.000400, mean loss = 1.9934, perplexity =   7.3405, and 163.35 seconds elapsed.
+# Finished epoch 10 @ step 10430 @ 2018-07-26 09:24:25. In the epoch, learning rate = 0.000320, mean loss = 1.8277, perplexity =   6.2197, and 163.44 seconds elapsed.
+# Finished epoch 11 @ step 11473 @ 2018-07-26 09:27:08. In the epoch, learning rate = 0.000320, mean loss = 1.7095, perplexity =   5.5264, and 163.43 seconds elapsed.
+# Finished epoch 12 @ step 12516 @ 2018-07-26 09:29:58. In the epoch, learning rate = 0.000320, mean loss = 1.6207, perplexity =   5.0568, and 169.68 seconds elapsed.
+# Finished epoch 13 @ step 13559 @ 2018-07-26 09:33:00. In the epoch, learning rate = 0.000320, mean loss = 1.5471, perplexity =   4.6980, and 181.57 seconds elapsed.
+# Finished epoch 14 @ step 14602 @ 2018-07-26 09:36:01. In the epoch, learning rate = 0.000240, mean loss = 1.4244, perplexity =   4.1554, and 181.22 seconds elapsed.
+# Finished epoch 15 @ step 15645 @ 2018-07-26 09:38:58. In the epoch, learning rate = 0.000240, mean loss = 1.3387, perplexity =   3.8140, and 177.53 seconds elapsed.
+# Finished epoch 16 @ step 16688 @ 2018-07-26 09:41:44. In the epoch, learning rate = 0.000240, mean loss = 1.2827, perplexity =   3.6062, and 165.05 seconds elapsed.
+# Finished epoch 17 @ step 17731 @ 2018-07-26 09:44:27. In the epoch, learning rate = 0.000240, mean loss = 1.2322, perplexity =   3.4287, and 163.44 seconds elapsed.
+# Finished epoch 18 @ step 18774 @ 2018-07-26 09:47:09. In the epoch, learning rate = 0.000240, mean loss = 1.1872, perplexity =   3.2777, and 162.39 seconds elapsed.
+# Finished epoch 19 @ step 19817 @ 2018-07-26 09:49:51. In the epoch, learning rate = 0.000240, mean loss = 1.1503, perplexity =   3.1591, and 161.79 seconds elapsed.
+# Finished epoch 20 @ step 20860 @ 2018-07-26 09:52:35. In the epoch, learning rate = 0.000200, mean loss = 1.0869, perplexity =   2.9651, and 163.67 seconds elapsed.
+# Finished epoch 21 @ step 21903 @ 2018-07-26 09:55:18. In the epoch, learning rate = 0.000200, mean loss = 1.0360, perplexity =   2.8180, and 162.71 seconds elapsed.
+# Finished epoch 22 @ step 22946 @ 2018-07-26 10:00:39. In the epoch, learning rate = 0.000200, mean loss = 1.0004, perplexity =   2.7194, and 321.10 seconds elapsed.
+# Finished epoch 23 @ step 23989 @ 2018-07-26 10:08:55. In the epoch, learning rate = 0.000200, mean loss = 0.9716, perplexity =   2.6422, and 496.54 seconds elapsed.
+# Finished epoch 24 @ step 25032 @ 2018-07-26 10:16:51. In the epoch, learning rate = 0.000200, mean loss = 0.9430, perplexity =   2.5677, and 475.42 seconds elapsed.
+# Finished epoch 25 @ step 26075 @ 2018-07-26 10:24:51. In the epoch, learning rate = 0.000200, mean loss = 0.9196, perplexity =   2.5084, and 480.67 seconds elapsed.
+# Finished epoch 26 @ step 27118 @ 2018-07-26 10:32:57. In the epoch, learning rate = 0.000200, mean loss = 0.8931, perplexity =   2.4426, and 485.69 seconds elapsed.
+# Finished epoch 27 @ step 28161 @ 2018-07-26 10:40:52. In the epoch, learning rate = 0.000200, mean loss = 0.8695, perplexity =   2.3856, and 474.73 seconds elapsed.
+# Finished epoch 28 @ step 29204 @ 2018-07-26 10:48:56. In the epoch, learning rate = 0.000160, mean loss = 0.8275, perplexity =   2.2877, and 484.38 seconds elapsed.
+# Finished epoch 29 @ step 30247 @ 2018-07-26 10:56:50. In the epoch, learning rate = 0.000160, mean loss = 0.7913, perplexity =   2.2062, and 473.85 seconds elapsed.
+# Finished epoch 30 @ step 31290 @ 2018-07-26 11:04:42. In the epoch, learning rate = 0.000160, mean loss = 0.7686, perplexity =   2.1566, and 472.19 seconds elapsed.
+# Finished epoch 31 @ step 32333 @ 2018-07-26 11:12:36. In the epoch, learning rate = 0.000160, mean loss = 0.7484, perplexity =   2.1136, and 473.88 seconds elapsed.
+# Finished epoch 32 @ step 33376 @ 2018-07-26 11:20:32. In the epoch, learning rate = 0.000160, mean loss = 0.7289, perplexity =   2.0727, and 475.75 seconds elapsed.
+# Finished epoch 33 @ step 34419 @ 2018-07-26 11:28:25. In the epoch, learning rate = 0.000160, mean loss = 0.7152, perplexity =   2.0447, and 473.71 seconds elapsed.
+
+
+"example_num":200000,
+"num_layers": 2,
+"batch_size": 64,
+# Finished epoch 995 @ step 1037785 @ 2018-07-29 10:35:01. In the epoch, learning rate = 0.000096, mean loss = 0.0704, perplexity =   1.0729, and 166.84 seconds elapsed.
+# Finished epoch 996 @ step 1038828 @ 2018-07-29 10:37:49. In the epoch, learning rate = 0.000096, mean loss = 0.0710, perplexity =   1.0736, and 167.69 seconds elapsed.
+# Finished epoch 997 @ step 1039871 @ 2018-07-29 10:40:35. In the epoch, learning rate = 0.000096, mean loss = 0.0703, perplexity =   1.0729, and 166.72 seconds elapsed.
+# Finished epoch 998 @ step 1040914 @ 2018-07-29 10:43:22. In the epoch, learning rate = 0.000096, mean loss = 0.0703, perplexity =   1.0728, and 167.03 seconds elapsed.
+# Finished epoch 999 @ step 1041957 @ 2018-07-29 10:46:09. In the epoch, learning rate = 0.000096, mean loss = 0.0703, perplexity =   1.0728, and 166.76 seconds elapsed.
+# Finished epoch 1000 @ step 1043000 @ 2018-07-29 10:48:56. In the epoch, learning rate = 0.000096, mean loss = 0.0700, perplexity =   1.0725, and 166.81 seconds elapsed.
+
