@@ -19,7 +19,7 @@
   "log_device_placement": true,
   "max_gradient_norm": 5.0,
   "num_buckets": 5,
-  "num_epochs": 1000,
+  "num_epochs": 1,
   "num_layers": 2,
   "num_units": 1024,
   "pass_hidden_state": true,
@@ -30,6 +30,6 @@
   "tgt_max_len": 50,
   "tgt_max_len_infer": 50,
   "time_major": true,
-  "example_num":200000,
+  "example_num":1000,
   "vocab_size":10000
 }

@@ -38,8 +38,12 @@ class BotPredictor(object):
             result_dir: The folder containing the trained result files.
             result_file: The file name of the trained model.
         """
-        self.session = session
+        if session == None:
+            print('None type.')
+            session = tf.Session()
 
+        self.session = session
+        
         # Prepare data and hyper parameters
         print("# Prepare dataset placeholder and hyper parameters ...")
         self.tokenized_data = TokenizedData(corpus_dir=corpus_dir, training=False)
@@ -69,7 +73,7 @@ class BotPredictor(object):
         
         # Restore model weights
         print("# Restoring model weights ...")
-        self.model.saver.restore(session, ckpt.model_checkpoint_path)
+        self.model.saver.restore(self.session, ckpt.model_checkpoint_path)
 
         self.session.run(tf.tables_initializer())
 
