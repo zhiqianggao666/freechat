@@ -18,6 +18,7 @@ import tensorflow as tf
 from flask import Flask, request, jsonify
 from settings import PROJECT_ROOT
 from chatbot.botpredictor import BotPredictor
+from flask import make_response
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 app = Flask(__name__)
@@ -58,9 +59,13 @@ def reply():
 	print('question %s:', question)
 	if session_id not in predictor.session_data.session_dict:  # Including the case of 0
 		session_id = predictor.session_data.add_session()
-	
 	answer = predictor.predict(session_id, question, html_format=True)
-	return jsonify({'sessionId': session_id, 'sentence': answer})
+	response = make_response(answer)
+	response.headers['Access-Control-Allow-Origin'] = '*'
+	response.headers['Access-Control-Allow-Methods'] = 'POST'
+	response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+	return response
+	#return jsonify({'sessionId': session_id, 'sentence': answer})
 
 #
 # if __name__ == "__main__":
