@@ -13,13 +13,13 @@
             height:500px;
             border:1px solid #666;
             margin:50px auto 0;
-            background:#f9f9f9;
+            background:#E6E6FA;
         }
         .talk_show{
             width:580px;
             height:420px;
             border:1px solid #666;
-            background:#fff;
+            background:#E6E6FA;
             margin:10px auto 0;
             overflow:auto;
         }
@@ -82,7 +82,6 @@
     }
         window.onload = function(){
             var Words = document.getElementById("words");
-            //var Who = document.getElementById("who");
             var TalkWords = document.getElementById("talkwords");
             var TalkSub = document.getElementById("talksub");
 
@@ -107,9 +106,12 @@
                  XmlHttpRequest.open("GET",url,true);
                  //发送请求
                 XmlHttpRequest.send(null);
-                
-                
-
+            }
+            TalkWords.onkeypress= function EnterPress(e){
+            	var e = e || window.event;
+            	if(e.keyCode == 13){
+            		TalkSub.onclick()
+            	}
             }
             function finish(){
                 if(XmlHttpRequest.readyState == 4 && XmlHttpRequest.status == 200){
@@ -127,12 +129,12 @@
 
     </script>
 </head>
-<body>
-欢迎来到FreeChat[中文对话系统]。<br>
-本系统正在开发完善中，谢谢！<br>
-已实现：TF RNN神经网络模型<br>
-待实现：融合矢量模型
-    <div class="talk_con">
+<body bgcolor="#C7EDCC">
+<p>
+<p align="center"><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;">欢迎来到FreeChat[中文对话系统]</span><br /><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;">本系统正在开发完善中，谢谢！</span><br /><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;">已实现：TF RNN神经网络模型</span><br /><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;"> 待实现：融合矢量模型</span></span></p>
+<p align="center"><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;">xfei.zhang(henry860916@126.com)</span></span></p>
+
+  <div class="talk_con">
         <div class="talk_show" id="words">
             <div class="atalk"><span id="asay">我：你好</span></div>
             <div class="btalk"><span id="bsay">机器人：好啊</span></div>
