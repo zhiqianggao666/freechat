@@ -1,9 +1,9 @@
-<%@ page contentType="text/html; charset=GBK" import="java.util.*"%>
+<%@ page contentType="text/html; charset=utf-8" import="java.util.*"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="charset=gb2312">
+    <meta charset="charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
@@ -72,7 +72,7 @@
     </style>
 
     <script type="text/javascript">     
-    //´´½¨XMLHttpRequest
+    //åˆ›å»ºXMLHttpRequest
     function createXmlHttpRequest(){
         if(window.XMLHttpRequest){
             return new XMLHttpRequest();
@@ -88,23 +88,23 @@
             TalkSub.onclick = function(){
                 var str = "";
                 if(TalkWords.value == ""){
-                    alert("ÏûÏ¢²»ÄÜÎª¿Õ");
+                    alert("æ¶ˆæ¯ä¸èƒ½ä¸ºç©º");
                     return;
                 }
-                strI = '<div class="atalk"><span>ÎÒ:' + TalkWords.value +'</span></div>';
-                //getÇëÇó×Ö·û´®
+                strI = '<div class="atalk"><span>æˆ‘:' + TalkWords.value +'</span></div>';
+                //getè¯·æ±‚å­—ç¬¦ä¸²
                 var url="http://109.123.123.140:8098/reply?sessionId=1&question="+TalkWords.value;
                 Words.innerHTML = Words.innerHTML + strI;
                 TalkWords.value="";
                 TalkWords.focus();
                 Words.scrollTop=Words.scrollHeight;                
-                 //µ÷ÓÃ·½·¨´´½¨XMLHttpRequest¶ÔÏó
+                 //è°ƒç”¨æ–¹æ³•åˆ›å»ºXMLHttpRequestå¯¹è±¡
                 XmlHttpRequest = createXmlHttpRequest();
-                 //ÉèÖÃ»Øµ÷º¯Êı
+                 //è®¾ç½®å›è°ƒå‡½æ•°
                 XmlHttpRequest.onreadystatechange=finish;
-                 //³õÊ¼»¯xmlhttprequest
-                 XmlHttpRequest.open("GET",url,true);
-                 //·¢ËÍÇëÇó
+                 //åˆå§‹åŒ–xmlhttprequest
+                 XmlHttpRequest.open("GET",window.encodeURI(url),true);
+                 //å‘é€è¯·æ±‚
                 XmlHttpRequest.send(null);
             }
             TalkWords.onkeypress= function EnterPress(e){
@@ -116,7 +116,7 @@
             function finish(){
                 if(XmlHttpRequest.readyState == 4 && XmlHttpRequest.status == 200){
                     var result = XmlHttpRequest.responseText;
-                    strBot = '<div class="btalk"><span>»úÆ÷ÈË:' + result +'</span></div>' ;  
+                    strBot = '<div class="btalk"><span>æœºå™¨äºº:' + result +'</span></div>' ;  
                     Words.innerHTML = Words.innerHTML + strBot;
                     TalkWords.value="";
                     TalkWords.focus();
@@ -131,16 +131,16 @@
 </head>
 <body style="background-image:url(timg.jpg);background-size:100% auto ; background-repeat:no-repeat ;-moz-background-size:100% 100%;">
 <p>
-<p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">»¶Ó­À´µ½FreeChat[ÖĞÎÄ¶Ô»°ÏµÍ³]</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">±¾ÏµÍ³ÕıÔÚ¿ª·¢ÍêÉÆÖĞ£¬Ğ»Ğ»£¡</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">ÒÑÊµÏÖ£ºTF RNNÉñ¾­ÍøÂçÄ£ĞÍ</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;"> ´ıÊµÏÖ£ºÈÚºÏÊ¸Á¿Ä£ĞÍ</span></span></p>
+<p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">æ¬¢è¿æ¥åˆ°FreeChat[ä¸­æ–‡å¯¹è¯ç³»ç»Ÿ]</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">æœ¬ç³»ç»Ÿæ­£åœ¨å¼€å‘å®Œå–„ä¸­ï¼Œè°¢è°¢ï¼</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">å·²å®ç°ï¼šTF RNNç¥ç»ç½‘ç»œæ¨¡å‹</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;"> å¾…å®ç°ï¼šèåˆçŸ¢é‡æ¨¡å‹</span></span></p>
 <p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;">xfei.zhang(henry860916@126.com)</span></span></p>
   <div class="talk_con">
         <div class="talk_show" id="words">
-            <div class="atalk"><span id="asay">ÎÒ£ºÄãºÃ</span></div>
-            <div class="btalk"><span id="bsay">»úÆ÷ÈË£ººÃ°¡</span></div>
+            <div class="atalk"><span id="asay">æˆ‘ï¼šä½ å¥½</span></div>
+            <div class="btalk"><span id="bsay">æœºå™¨äººï¼šä½  å¥½ å•Š å‘µ å‘µ å‘µ å‘µï¼</span></div>
         </div>
         <div class="talk_input">
             <input type="text" class="talk_word" id="talkwords">
-            <input type="button" value="·¢ËÍ" class="talk_sub" id="talksub">
+            <input type="button" value="å‘é€" class="talk_sub" id="talksub">
         </div>
     </div>
 </body>
