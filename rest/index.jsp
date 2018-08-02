@@ -131,8 +131,8 @@
 </head>
 <body style="background-image:url(timg.jpg);background-size:100% auto ; background-repeat:no-repeat ;-moz-background-size:100% 100%;">
 <p>
-<p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">欢迎来到FreeChat[中文对话系统]</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">本系统正在开发完善中，谢谢！</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">已实现：TF RNN神经网络模型</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;"> 待实现：融合矢量模型</span></span></p>
-<p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;">xfei.zhang(henry860916@126.com)</span></span></p>
+<p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">欢迎来到FreeChat[中文对话系统]</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">本系统正在开发完善中，谢谢！</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">已实现：TF RNN神经网络模型</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;"> 待实现：融合矢量模型,替换免费语料库</span></span></p>
+<p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;">xfei.zhang(henry860916@126.com)</span></span></p>  
   <div class="talk_con">
         <div class="talk_show" id="words">
             <div class="atalk"><span id="asay">我：你好</span></div>
