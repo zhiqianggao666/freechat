@@ -11,15 +11,15 @@
         .talk_con{
             width:600px;
             height:500px;
-            border:1px solid #666;
+            border:1.5px solid  #BC8F8F;
             margin:50px auto 0;
-            background:#E6E6FA;
+            background:rgba(0,0,0,0);
         }
         .talk_show{
             width:580px;
             height:420px;
-            border:1px solid #666;
-            background:#E6E6FA;
+            border:1.5px solid  #BC8F8F;
+            background:rgba(0,0,0,0);
             margin:10px auto 0;
             overflow:auto;
         }
@@ -129,11 +129,10 @@
 
     </script>
 </head>
-<body bgcolor="#C7EDCC">
+<body style="background-image:url(timg.jpg);background-size:100% auto ; background-repeat:no-repeat ;-moz-background-size:100% 100%;">
 <p>
-<p align="center"><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;">欢迎来到FreeChat[中文对话系统]</span><br /><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;">本系统正在开发完善中，谢谢！</span><br /><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;">已实现：TF RNN神经网络模型</span><br /><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;"> 待实现：融合矢量模型</span></span></p>
-<p align="center"><span style="color: #ff6600; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;">xfei.zhang(henry860916@126.com)</span></span></p>
-
+<p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">欢迎来到FreeChat[中文对话系统]</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">本系统正在开发完善中，谢谢！</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;">已实现：TF RNN神经网络模型</span><br /><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;"> 待实现：融合矢量模型</span></span></p>
+<p align="center"><span style="color: #00ff00; font-family: NSimSun; font-size: 24px;"><span style="font-family: NSimSun; font-size: 24px;">xfei.zhang(henry860916@126.com)</span></span></p>
   <div class="talk_con">
         <div class="talk_show" id="words">
             <div class="atalk"><span id="asay">我：你好</span></div>
