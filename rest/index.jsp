@@ -6,7 +6,7 @@
     <meta charset="charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>AI----人机对话</title>
     <style type="text/css">
         .talk_con{
             width:600px;
@@ -93,7 +93,7 @@
                 }
                 strI = '<div class="atalk"><span>我:' + TalkWords.value +'</span></div>';
                 //get请求字符串
-                var url="http://109.123.123.140:8098/reply?sessionId=1&question="+TalkWords.value;
+                var url="http://127.0.0.1:8098/reply?sessionId=1&question="+TalkWords.value;
                 Words.innerHTML = Words.innerHTML + strI;
                 TalkWords.value="";
                 TalkWords.focus();
