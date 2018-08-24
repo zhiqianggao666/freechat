@@ -1,0 +1,272 @@
+%YAML 1.1
+---
+action_factory: null
+action_names:
+- utter_greet
+- utter_ask_usecase
+- utter_ask_businessmail
+- utter_ask_jobfunction
+- utter_ask_email
+- utter_ask_budget
+- utter_ask_company
+- utter_ask_goal
+- utter_inform_privacypolicy
+- utter_moreinformation
+- utter_confirm_salesrequest
+- utter_docu
+- utter_confirmationemail
+- utter_sales_contact
+- utter_already_subscribed
+- utter_contact_email
+- utter_no_speak
+- utter_out_of_scope
+- utter_possibilities
+- utter_ask_name
+- utter_change_mind
+- utter_must_accept
+- utter_noworries
+- utter_bye
+- utter_awesome
+- utter_great
+- utter_thank_usecase
+- utter_canthelp
+- utter_nohelp
+- utter_thumbsup
+- utter_cantsignup
+- action_subscribe_newsletter
+- action_store_sales_info
+- action_store_budget
+- action_store_usecase
+- action_chitchat
+- action_store_name
+- action_store_company
+- action_store_job
+- action_store_email
+- action_pause
+actions:
+- utter_greet
+- utter_ask_usecase
+- utter_ask_businessmail
+- utter_ask_jobfunction
+- utter_ask_email
+- utter_ask_budget
+- utter_ask_company
+- utter_ask_goal
+- utter_inform_privacypolicy
+- utter_moreinformation
+- utter_confirm_salesrequest
+- utter_docu
+- utter_confirmationemail
+- utter_sales_contact
+- utter_already_subscribed
+- utter_contact_email
+- utter_no_speak
+- utter_out_of_scope
+- utter_possibilities
+- utter_ask_name
+- utter_change_mind
+- utter_must_accept
+- utter_noworries
+- utter_bye
+- utter_awesome
+- utter_great
+- utter_thank_usecase
+- utter_canthelp
+- utter_nohelp
+- utter_thumbsup
+- utter_cantsignup
+- demo.actions.ActionSubscribeNewsletter
+- demo.actions.ActionStoreSalesInfo
+- demo.actions.ActionStoreBudget
+- demo.actions.ActionStoreUsecase
+- demo.actions.ActionChitchat
+- demo.actions.ActionStoreName
+- demo.actions.ActionStoreCompany
+- demo.actions.ActionStoreJob
+- demo.actions.ActionStoreEmail
+- demo.actions.ActionPause
+config:
+  store_entities_as_slots: true
+entities:
+- jobfunction
+- company
+- email
+- name
+- amount-of-money
+- number
+intents:
+- enter_data:
+    use_entities: false
+- mood_confirm:
+    use_entities: true
+- contact_sales:
+    use_entities: true
+- signup_newsletter:
+    use_entities: true
+- greet:
+    use_entities: true
+- human_handoff:
+    use_entities: true
+- deny:
+    use_entities: true
+- ask_builder:
+    use_entities: true
+- ask_weather:
+    use_entities: true
+- ask_howdoing:
+    use_entities: true
+- ask_whatspossible:
+    use_entities: true
+- ask_whatisrasa:
+    use_entities: true
+- out_of_scope:
+    use_entities: true
+- thank:
+    use_entities: true
+- ask_whoisit:
+    use_entities: true
+- bye:
+    use_entities: true
+- canthelp:
+    use_entities: true
+slots:
+  budget:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  company_name:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  data_stored:
+    initial_value: null
+    type: rasa_core.slots.BooleanSlot
+  email:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  job_function:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  person_name:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  subscribed:
+    initial_value: null
+    type: rasa_core.slots.BooleanSlot
+  use_case:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+templates:
+  utter_already_subscribed:
+  - text: Looks like {email} is already subscribed - good choice! If you haven't received
+      a newsletter in a while, maybe check your spam folder 🗑
+  utter_ask_budget:
+  - text: What's your annual budget for conversational AI? 💸
+  utter_ask_builder:
+  - text: The engineers at Rasa 🛠
+  - text: One of the smart engineers at Rasa! 🧠
+  utter_ask_businessmail:
+  - text: What's your business email?
+  utter_ask_company:
+  - text: What company do you work for?
+  utter_ask_email:
+  - text: What's your email address?
+  utter_ask_goal:
+  - text: Do you want more Rasa in your life? You can subscribe to our newsletter
+      or you can talk to our nice sales team 🧞‍
+  utter_ask_howdoing:
+  - text: I'm great! Thanks for asking.
+  - text: I'm good, thanks!
+  - text: A little bit too warm, otherwise fine.
+  utter_ask_jobfunction:
+  - text: What's your job? 🕴
+  utter_ask_name:
+  - text: What's your name?
+  utter_ask_usecase:
+  - text: What kind of bot do you want to build with Rasa?
+  utter_ask_weather:
+  - text: I don't know about where you live, but in my world it's always sunny ☀️
+  - text: Honestly it's a bit too hot these days 😅
+  - text: Blue skies and sun shine!
+  - text: Let's just say it hasn't rained in weeks ☀️
+  utter_ask_whatisrasa:
+  - text: Rasa is a framework to build bots! You can read more about it here in the
+      docs or on our website (https://rasa.com/).
+  utter_ask_whatspossible:
+  - text: You can book a sales call or subscribe to our newsletter.
+  utter_ask_whoisit:
+  - text: I'm the Rasa bot! 🤖
+  utter_awesome:
+  - text: Awesome, thanks! 👍
+  - text: Sweet, thank you! 😄
+  - text: Thanks! 👌
+  - text: Cool, thank you!
+  utter_bye:
+  - text: Goodbye!
+  - text: Bye!
+  - text: Ciao!
+  - text: Bye, was nice talking to you!
+  utter_canthelp:
+  - text: I'm sorry I couldn't help you. If you have general questions about the Stack,
+      please head to https://forum.rasa.com/, otherwise contact us at hi@rasa.com
+      for anything else.
+  utter_cantsignup:
+  - text: I can't sign you up if you don't provide your email 😉
+  utter_change_mind:
+  - text: You can still change your mind below though.
+  utter_confirm_salesrequest:
+  - text: Thanks a bunch, we'll be in touch soon! ✉️
+  utter_confirmationemail:
+  - text: We sent a confirmation email to {email}.
+  utter_contact_email:
+  - text: You can’t speak to a human directly in this chat, but you can email us at
+      hi@rasa.com.
+  utter_default:
+  - text: Sorry, I didn't get that 🤷🏻‍. Could you please rephrase?
+  - text: I didn't understand, could you rephrase that?
+  - text: I'm sorry, but I didn't understand you. Could you please rephrase what you
+      just said?
+  - text: I'm afraid I didn't get what you just said. Could you rephrase that?
+  - text: I didn't quite get that, could you rephrase your message?
+  - text: Could you rephrase your message? I didn't get it, I'm sorry.
+  utter_docu:
+  - text: 'If you want some more awesome Rasa content, check out our forum: https://forum.rasa.com/'
+  utter_great:
+  - text: Great! 👍
+  - text: That's great! 🙌
+  - text: Awesome! 🎉
+  - text: Cool, let's do it 🚀
+  utter_greet:
+  - text: Hey there, welcome to Rasa!
+  utter_inform_privacypolicy:
+  - buttons:
+    - payload: /mood_confirm
+      title: Accept
+    - payload: /deny
+      title: Decline
+    text: Before we start chatting, please read and accept our privacy policy https://rasa.com/privacy-policy/.
+      Do you accept?
+  utter_moreinformation:
+  - text: Sure! Let's get to know each other first 😉
+  utter_must_accept:
+  - text: We can't speak until you accept.
+  utter_no_speak:
+  - text: I'm afraid we can't chat then 😢
+  utter_nohelp:
+  - text: "I'm afraid I can't help you then! For now I only have two skills:"
+  utter_noworries:
+  - text: No worries!
+  - text: You're welcome!
+  - text: I'm happy to help.
+  utter_out_of_scope:
+  - text: Sorry, I can’t deal with that request.
+  - text: I'm sorry, I can't handle that request.
+  - text: I can't help you with that, I'm sorry.
+  - text: Even a Rasa bot is not completely perfect - it seems like I can't handle
+      that request.
+  utter_possibilities:
+  - text: You can either book a sales call or subscribe to our newsletter.
+  utter_sales_contact:
+  - text: Thanks, now I need to know how we can reach you.
+  utter_thank_usecase:
+  - text: Cool, thank you!
+  utter_thumbsup:
+  - text: 👍
