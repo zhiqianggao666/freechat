@@ -1,7 +1,0 @@
-venv/
-travis_gcloud_auth.json
-docker-compose.override.yml
-.DS_Store
-*.pyc
-*.log
-models/nlu
