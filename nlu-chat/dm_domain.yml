@@ -1,0 +1,39 @@
+slots:
+  item:
+    type: text
+  location:
+    type: text
+  cuisines:
+    type: text
+
+intents:
+  - greet
+  - inform_item
+  - inform_location
+  - inform_cuisines
+  - restaurant_search
+
+entities:
+  - item
+  - location
+  - cuisines
+
+templates:
+  utter_greet:
+    - "您好!"
+  utter_ask_item:
+    - "请问可以帮到您吗？"
+  utter_ask_location:
+    - "请问您想去哪里？"
+  utter_ask_cuisines:
+    - "请问您喜欢什么菜系"
+  utter_ack_management:
+    - "已经为您解决了{item}的问题,地点{location},菜系{cuisines}"
+
+actions:
+  - utter_greet
+  - utter_ask_item
+  - utter_ask_location
+  - utter_ask_cuisines
+  - utter_ack_management
+  - bot.ActionSearchRestaurant
