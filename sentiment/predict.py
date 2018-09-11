@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jul  8 19:57:29 2016
-
-@author: ldy
-"""
-
 import sys
 #sys.path.append("code")
 from sentiments.Sentiment_svm import svm_predict
