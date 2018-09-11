@@ -101,8 +101,8 @@ def word2vec_train(combined):
                      workers=cpu_count,
                      iter=n_iterations)
     model.build_vocab(combined)
-    model.train(combined,total_examples=model.corpus_count, epochs=model.epochs)
-    model.save('lstm_data/Word2vec_model.pkl')
+    model.train(combined,total_examples=model.corpus_count, epochs=200)
+    model.save('../data/lstm_data/Word2vec_model.pkl')
     index_dict, word_vectors,combined = create_dictionaries(model=model,combined=combined)
     return   index_dict, word_vectors,combined
 
@@ -143,9 +143,9 @@ def train_lstm(n_symbols,embedding_weights,x_train,y_train,x_test,y_test):
                                 batch_size=batch_size)
 
     yaml_string = model.to_yaml()
-    with open('lstm_data/lstm.yml', 'w') as outfile:
+    with open('../data/lstm_data/lstm.yml', 'w') as outfile:
         outfile.write( yaml.dump(yaml_string, default_flow_style=True) )
-    model.save_weights('lstm_data/lstm.h5')
+    model.save_weights('../data/lstm_data/lstm.h5')
     print ('Test score:', score)
 
 
@@ -169,18 +169,18 @@ def train():
 def input_transform(string):
     words=jieba.lcut(string)
     words=np.array(words).reshape(1,-1)
-    model=Word2Vec.load('lstm_data/Word2vec_model.pkl')
+    model=Word2Vec.load('../data/lstm_data/Word2vec_model.pkl')
     _,_,combined=create_dictionaries(model,words)
     return combined
 
 def lstm_predict(string):
     print ('loading model......')
-    with open('lstm_data/lstm.yml', 'r') as f:
+    with open('../data/lstm_data/lstm.yml', 'r') as f:
         yaml_string = yaml.load(f)
     model = model_from_yaml(yaml_string)
 
     print ('loading weights......')
-    model.load_weights('lstm_data/lstm.h5')
+    model.load_weights('../data/lstm_data/lstm.h5')
     model.compile(loss='binary_crossentropy',
                   optimizer='adam',metrics=['accuracy'])
     data=input_transform(string)
@@ -199,7 +199,7 @@ if __name__=='__main__':
     #string='手机质量太差了，傻逼店家，赚黑心钱，以后再也不会买了'
     #string='我是傻逼'
     #string='你是傻逼'
-    string='屏幕较差，拍照也很粗糙。'
+    #string='屏幕较差，拍照也很粗糙。'
     #string='质量不错，是正品 ，安装师傅也很好，才要了83元材料费'
     #string='东西非常不错，安装师傅很负责人，装的也很漂亮，精致，谢谢安装师傅！'
     #string = '坏人一个'
